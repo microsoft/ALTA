@@ -1,3 +1,6 @@
+# Project ALTA
+Welcome to ALTA! We are very happy to cover all of your load needs. Currently, our solution is able to support MS Test files and allow them to be ran on Azure Load Testing Service. We hope to continue this project and allow more adaptability in the future, so please feel free to check in every once in a while!
+
 # Project
 
 > This repo has been populated by an initial template to help get you started. Please
