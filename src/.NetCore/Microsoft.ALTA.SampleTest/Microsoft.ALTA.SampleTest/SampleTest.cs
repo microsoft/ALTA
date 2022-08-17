@@ -1,10 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Microsoft.TestEngine.Tests
+namespace Microsoft.ALTA.SampleTests
 {
     [TestClass]
-    public class PracticeTests
+    public class SampleTest
     {
         private static HttpClient? client;
         private static IHttpClientFactory _httpClientFactory;

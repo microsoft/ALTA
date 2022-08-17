@@ -1,4 +1,4 @@
-﻿namespace Microsoft.TestEngine
+﻿namespace Microsoft.ALTA
 {
     public class Startup
     {

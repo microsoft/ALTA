@@ -1,0 +1,1 @@
+xcopy /y /d  "$(ProjectDir)External\*.dll" "$(ProjectDir)$(OutDir)"

@@ -4,11 +4,11 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using System.Web.Http;
 
-namespace Microsoft.TestEngine.Controllers
+namespace Microsoft.ALTA.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TestEngineController : Controller
+    public class ALTAController : Controller
     {
 
         private Type type;
