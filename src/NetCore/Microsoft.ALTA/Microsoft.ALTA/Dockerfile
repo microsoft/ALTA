@@ -1,11 +1,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 as builder
-WORKDIR /hardcodedapi/HardCodedTestApi
-COPY ["/HardCodedTestApi/HardCodedTestApi.csproj", "HardCodedTestApi/"]
-COPY ["/HardCodedTestApi.Tests/HardCodedTestApi.Tests.csproj", "HardCodedTestApi.Tests/"]
-RUN dotnet restore "HardCodedTestApi/HardCodedTestApi.csproj" --runtime linux-x64
+WORKDIR /src/NetCore/Microsoft.ALTA/Microsoft.ALTA
+COPY ["Microsoft.ALTA.csproj"]
+RUN dotnet restore "Microsoft.ALTA.csproj" --runtime linux-x64
 COPY . .
-WORKDIR "/hardcodedapi/HardCodedTestApi/HardCodedTestApi"
-RUN dotnet publish "HardCodedTestApi.csproj" -c Release -o /app
+RUN dotnet publish "Microsoft.ALTA.csproj" -c Release -o /app
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-cbl-mariner2.0 AS runtime
@@ -17,4 +15,4 @@ USER root
 ENV ASPNETCORE_URLS http://+:80
 EXPOSE 80
 
-ENTRYPOINT ["dotnet", "HardCodedTestApi.dll"]
+ENTRYPOINT ["dotnet", "Microsoft.ALTA.dll"]
