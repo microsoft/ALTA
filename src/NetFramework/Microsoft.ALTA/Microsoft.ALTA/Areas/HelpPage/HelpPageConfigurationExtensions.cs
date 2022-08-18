@@ -1,5 +1,3 @@
-using Microsoft.ALTA.Areas.HelpPage.ModelDescriptions;
-using Microsoft.ALTA.Areas.HelpPage.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +11,8 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
+using Microsoft.ALTA.Areas.HelpPage.ModelDescriptions;
+using Microsoft.ALTA.Areas.HelpPage.Models;
 
 namespace Microsoft.ALTA.Areas.HelpPage
 {

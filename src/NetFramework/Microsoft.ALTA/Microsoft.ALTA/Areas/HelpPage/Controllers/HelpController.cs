@@ -1,8 +1,8 @@
-using Microsoft.ALTA.Areas.HelpPage.ModelDescriptions;
-using Microsoft.ALTA.Areas.HelpPage.Models;
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
+using Microsoft.ALTA.Areas.HelpPage.ModelDescriptions;
+using Microsoft.ALTA.Areas.HelpPage.Models;
 
 namespace Microsoft.ALTA.Areas.HelpPage.Controllers
 {

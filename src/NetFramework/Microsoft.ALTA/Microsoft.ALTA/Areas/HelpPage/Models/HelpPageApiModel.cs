@@ -1,8 +1,8 @@
-using Microsoft.ALTA.Areas.HelpPage.ModelDescriptions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using System.Web.Http.Description;
+using Microsoft.ALTA.Areas.HelpPage.ModelDescriptions;
 
 namespace Microsoft.ALTA.Areas.HelpPage.Models
 {
