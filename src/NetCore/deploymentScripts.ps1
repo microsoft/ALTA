@@ -15,3 +15,4 @@ az account set --name "Cloud.Validation.and.Pipeline.Orchestration"
 #az webapp deployment source config-zip --resource-group "rg-test-internship" --name "ZipDeployChecker" --src "net6.0.zip"
 az webapp deploy --resource-group "rg-test-internship" --name "ZipDeployChecker" --type "zip" --src-path "C:\Users\t-abelseyoum\source\repos\microsoft\ALTA\src\NetCore\net6.0.zip"
 #Publish-AzWebApp -ResourceGroupName Default-Web-WestUS -Name ZipDeployChecker2 -ArchivePath "C:\Users\t-abelseyoum\source\repos\microsoft\ALTA\src\NetCore\net6.0.zip"
+
