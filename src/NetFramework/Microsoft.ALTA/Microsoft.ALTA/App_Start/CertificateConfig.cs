@@ -1,6 +1,8 @@
 ﻿using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Microsoft.ALTA
@@ -10,22 +12,30 @@ namespace Microsoft.ALTA
 
         public static async void RegisterCerts()
         {
-            const string secretName = "alta-test-certificate-protected";
-            var kvUri = "https://test-internship-kv.vault.azure.net";
+            string certs = ConfigurationManager.AppSettings["MSTEST_CERTIFICATES"];
+            string[] parsed = certs.Split(';');
+            foreach (string key in parsed) {
+                string[] KVCert = key.Split(',');
+               
+                string url = KVCert[0].Substring(KVCert[0].IndexOf('=') + 1);
+                string name = KVCert[1].Substring(KVCert[1].IndexOf('=') + 1);
 
+                var client = new SecretClient(new Uri(url), new DefaultAzureCredential());
 
-            var client = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
+                var secret = await client.GetSecretAsync(name);
 
-            var secret = await client.GetSecretAsync(secretName);
+                byte[] data = Convert.FromBase64String(secret.Value.Value);
+                string password = null;
 
-            byte[] data = Convert.FromBase64String(secret.Value.Value);
-            string password = null;
+                X509Certificate2 certificate = new X509Certificate2(data, password, X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
 
-            X509Certificate2 certificate = new X509Certificate2(data, password, X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
+                var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+                store.Open(OpenFlags.ReadWrite);
+                store.Add(certificate);
 
-            var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
-            store.Open(OpenFlags.ReadWrite);
-            store.Add(certificate);
+            }
+
+            
         }
     }
 }

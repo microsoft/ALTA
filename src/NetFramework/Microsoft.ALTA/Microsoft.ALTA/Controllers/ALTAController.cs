@@ -23,6 +23,7 @@ namespace Microsoft.ALTA.Controllers
         public async Task<ActionResult> runTest(string methodName, string assemblyName, string className, string[] query = null)
         {
             MethodInfo method;
+            
             if (methods.ContainsKey(assemblyName + className + methodName))
             {
                 method = methods[assemblyName + className + methodName];
@@ -39,6 +40,7 @@ namespace Microsoft.ALTA.Controllers
                 Assembly testAssembly;
                 if (!assemblies.ContainsKey(assemblyName))
                 {
+                   // testAssembly = Assembly.LoadFrom(Path.Combine(Path.GetDirectoryName(AppDomain.CurrentDomain.RelativeSearchPath), $@"Debug\{assemblyName}.dll"));
                     testAssembly = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, $"{assemblyName}.dll"));
                     assemblies[assemblyName] = testAssembly;
                 }
