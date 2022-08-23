@@ -1,24 +1,22 @@
-﻿using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Security.Cryptography.X509Certificates;
-
-namespace Microsoft.ALTA
+﻿namespace Microsoft.ALTA
 {
+    using System;
+    using System.Configuration;
+    using System.Security.Cryptography.X509Certificates;
+    using Azure.Identity;
+    using Azure.Security.KeyVault.Secrets;
+
     public class CertificateConfig
     {
-
         public static async void RegisterCerts()
         {
             string certs = ConfigurationManager.AppSettings["MSTEST_CERTIFICATES"];
             string[] parsed = certs.Split(';');
-            foreach (string key in parsed) {
-                string[] KVCert = key.Split(',');
-               
-                string url = KVCert[0].Substring(KVCert[0].IndexOf('=') + 1);
-                string name = KVCert[1].Substring(KVCert[1].IndexOf('=') + 1);
+            foreach (string key in parsed)
+            {
+                string[] kvCert = key.Split(',');
+                string url = kvCert[0].Substring(kvCert[0].IndexOf('=') + 1);
+                string name = kvCert[1].Substring(kvCert[1].IndexOf('=') + 1);
 
                 var client = new SecretClient(new Uri(url), new DefaultAzureCredential());
 
@@ -32,10 +30,7 @@ namespace Microsoft.ALTA
                 var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
                 store.Open(OpenFlags.ReadWrite);
                 store.Add(certificate);
-
             }
-
-            
         }
     }
 }

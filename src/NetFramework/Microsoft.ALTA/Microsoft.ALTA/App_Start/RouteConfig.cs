@@ -1,8 +1,8 @@
-﻿using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace Microsoft.ALTA
+﻿namespace Microsoft.ALTA
 {
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
     public class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)
@@ -14,10 +14,8 @@ namespace Microsoft.ALTA
                 defaults: new
                 {
                     controller = "ALTA",
-                    action = "runTest"
-                   
-                }
-            );
+                    action = "runTest",
+                });
         }
     }
 }

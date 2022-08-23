@@ -23,7 +23,6 @@ namespace Microsoft.ALTA.SampleTest
             _httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
             client = _httpClientFactory.CreateClient();
             logger = new LoggerFactory().CreateLogger("test");
-
         }
 
         [TestMethod]
