@@ -1,30 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Concurrent;
-using System.Reflection;
-using System.Web.Http;
-
-namespace Microsoft.ALTA.Controllers
+﻿namespace Microsoft.ALTA.Controllers
 {
+    using System.Collections.Concurrent;
+    using System.Reflection;
+    using System.Web.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [Route("api/[controller]")]
     [ApiController]
     public class ALTAController : Controller
     {
-
-        private Type type;
-        private object testInstance;
-        // path for the assembly test file
-        private string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private static ConcurrentDictionary<string, Assembly> assemblies = new ConcurrentDictionary<string, Assembly>();
         private static ConcurrentDictionary<string, object> instances = new ConcurrentDictionary<string, object>();
         private static ConcurrentDictionary<string, Type> types = new ConcurrentDictionary<string, Type>();
         private static ConcurrentDictionary<string, MethodInfo> methods = new ConcurrentDictionary<string, MethodInfo>();
-
+        private string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         [HttpGet]
-        public async Task<ActionResult> runTest(string methodName, string assemblyName, string className, [FromQuery] string[] query = null)
+        public async Task<ActionResult> RunTest(string methodName, string assemblyName, string className, [FromQuery] string[] query = null)
         {
-
+            object testInstance;
+            Type type;
             MethodInfo method;
             if (methods.ContainsKey(assemblyName + className + methodName))
             {
@@ -35,15 +31,14 @@ namespace Microsoft.ALTA.Controllers
                 var task = (Task)method.Invoke(testInstance, query);
                 await task;
 
-                return StatusCode(200);
-
+                return this.StatusCode(200);
             }
             else
             {
                 Assembly testAssembly;
                 if (!assemblies.ContainsKey(assemblyName))
                 {
-                    testAssembly = Assembly.LoadFrom(Path.Combine(path, $"{assemblyName}.dll"));
+                    testAssembly = Assembly.LoadFrom(Path.Combine(this.path, $"{assemblyName}.dll"));
                     assemblies[assemblyName] = testAssembly;
                 }
                 else
@@ -67,9 +62,8 @@ namespace Microsoft.ALTA.Controllers
                 }
                 else
                 {
-                    testInstance = InitializeClass(type, testInstance);
+                    testInstance = InitializeClass(type);
                     instances[assemblyName + className] = testInstance;
-
                 }
 
                 method = type.GetMethod(methodName);
@@ -78,22 +72,20 @@ namespace Microsoft.ALTA.Controllers
                 var task = (Task)method.Invoke(testInstance, query);
                 await task;
 
-                return StatusCode(200);
-
+                return this.StatusCode(200);
             }
-
         }
 
-        private static object InitializeClass(Type t, object test_Instance)
+        private static object InitializeClass(Type t)
         {
-            test_Instance = Activator.CreateInstance(t);
+            object test_Instance = Activator.CreateInstance(t);
             var initializeClass = t.GetMethods().FirstOrDefault(x => x.GetCustomAttributes<ClassInitializeAttribute>().Any());
             if (initializeClass != null)
             {
                 initializeClass.Invoke(test_Instance, new object[] { null });
             }
+
             return test_Instance;
         }
-
     }
 }
