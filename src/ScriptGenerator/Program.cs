@@ -239,7 +239,7 @@ namespace ScriptGeneratorApplication
                                 new XElement("stringProp",
                                     new XAttribute("name", "HTTPSampler.port"), string.Empty),
                                 new XElement("stringProp",
-                                    new XAttribute("name", "HTTPSampler.protocol"), string.Empty),
+                                    new XAttribute("name", "HTTPSampler.protocol"), "https"),
                                 new XElement("stringProp",
                                     new XAttribute("name", "HTTPSampler.contentEncoding"), string.Empty),
                                 new XElement("stringProp",
@@ -304,9 +304,6 @@ namespace ScriptGeneratorApplication
                     for (int i = 0; i < generatedScripts.Count; i++)
                     {
                         generatedScripts[i].Save($@"{path}{folderPath}\{testScript.tests[i].method}.jmx");
-                        string text = File.ReadAllText($@"{path}{folderPath}\{testScript.tests[i].method}.jmx");
-                        text = text.Replace("&amp;", "&");
-                        File.WriteAllText($@"{path}{folderPath}\{testScript.tests[i].method}.jmx", text);
 
                     }
                     Console.WriteLine($@"Scripts saved to {path}{folderPath}");
@@ -337,9 +334,6 @@ namespace ScriptGeneratorApplication
                     for (int i = 0; i < generatedScripts.Count; i++)
                     {
                         generatedScripts[i].Save($@"{path}{folderPath}\{json.tests[i].method}.jmx");
-                        string text = File.ReadAllText($@"{path}{folderPath}\{json.tests[i].method}.jmx");
-                        text = text.Replace("&amp;", "&");
-                        File.WriteAllText($@"{path}{folderPath}\{json.tests[i].method}.jmx", text);
 
                     }
                     Console.WriteLine($@"Scripts saved to {path}{folderPath}");
