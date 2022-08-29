@@ -88,8 +88,6 @@
             object test_Instance = Activator.CreateInstance(t);
             var initializeClass = t.GetMethods().FirstOrDefault(x => x.GetCustomAttributes<ClassInitializeAttribute>().Any());
 
-
-
             if (initializeClass != null)
             {
                 initializeClass.Invoke(test_Instance, new object[] { null });
