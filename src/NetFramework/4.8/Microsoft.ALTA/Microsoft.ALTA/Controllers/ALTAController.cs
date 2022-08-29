@@ -26,13 +26,11 @@
             {
                 method = methods[assemblyName + className + methodName];
                 testInstance = instances[assemblyName + className];
-
                 type = types[assemblyName + className];
 
                 // running the test method
                 InitializeTest(type, testInstance);
                 await (Task)method.Invoke(testInstance, query);
-
 
                 return new HttpStatusCodeResult(200);
             }
@@ -42,9 +40,7 @@
                 if (!assemblies.ContainsKey(assemblyName))
                 {
                     testAssembly = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, $"{assemblyName}.dll"));
-
                     InitializeAssembly(testAssembly);
-
                     assemblies[assemblyName] = testAssembly;
                 }
                 else
@@ -79,7 +75,6 @@
 
                 await (Task)method.Invoke(testInstance, query);
 
-
                 return new HttpStatusCodeResult(200);
             }
         }
@@ -88,8 +83,6 @@
         {
             object test_Instance = Activator.CreateInstance(t);
             var initializeClass = t.GetMethods().FirstOrDefault(x => x.GetCustomAttributes<ClassInitializeAttribute>().Any());
-
-
 
             if (initializeClass != null)
             {
@@ -103,7 +96,6 @@
         private static void InitializeAssembly(Assembly assembly)
         {
             var assemblyType = assembly.GetTypes().FirstOrDefault(y => y.IsDefined(typeof(AssemblyInitializeAttribute)));
-
             if (assemblyType != null)
             {
                 var initializeAssembly = assemblyType.GetMethods().FirstOrDefault(x => x.GetCustomAttributes<AssemblyInitializeAttribute>().Any());
