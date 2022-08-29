@@ -27,9 +27,11 @@
                 method = methods[assemblyName + className + methodName];
                 testInstance = instances[assemblyName + className];
 
+                type = types[assemblyName + className];
+
                 // running the test method
-                var task = (Task)method.Invoke(testInstance, query);
-                await task;
+                InitializeTest(type, testInstance);
+                await (Task)method.Invoke(testInstance, query);
 
                 return this.StatusCode(200);
             }
@@ -39,6 +41,9 @@
                 if (!assemblies.ContainsKey(assemblyName))
                 {
                     testAssembly = Assembly.LoadFrom(Path.Combine(this.path, $"{assemblyName}.dll"));
+
+                    InitializeAssembly(testAssembly);
+
                     assemblies[assemblyName] = testAssembly;
                 }
                 else
@@ -69,8 +74,10 @@
                 method = type.GetMethod(methodName);
                 methods[assemblyName + className + methodName] = method;
 
-                var task = (Task)method.Invoke(testInstance, query);
-                await task;
+                InitializeTest(type, testInstance);
+
+                await (Task)method.Invoke(testInstance, query);
+
 
                 return this.StatusCode(200);
             }
@@ -80,6 +87,7 @@
         {
             object test_Instance = Activator.CreateInstance(t);
             var initializeClass = t.GetMethods().FirstOrDefault(x => x.GetCustomAttributes<ClassInitializeAttribute>().Any());
+
             if (initializeClass != null)
             {
                 initializeClass.Invoke(test_Instance, new object[] { null });
@@ -87,5 +95,27 @@
 
             return test_Instance;
         }
+
+
+        private static void InitializeAssembly(Assembly assembly)
+        {
+            var assemblyType = assembly.GetTypes().FirstOrDefault(y => y.IsDefined(typeof(AssemblyInitializeAttribute)));
+
+            if (assemblyType != null)
+            {
+                var initializeAssembly = assemblyType.GetMethods().FirstOrDefault(x => x.GetCustomAttributes<AssemblyInitializeAttribute>().Any());
+                initializeAssembly.Invoke(assemblyType, new object[] { null });
+            }
+        }
+
+        private static void InitializeTest(Type t, object testInstance)
+        {
+            var initializeTest = t.GetMethods().FirstOrDefault(x => x.GetCustomAttributes<TestInitializeAttribute>().Any());
+            if (initializeTest != null)
+            {
+                initializeTest.Invoke(testInstance, new object[] { null });
+            }
+        }
+
     }
 }
