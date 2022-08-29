@@ -293,6 +293,8 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+
+
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

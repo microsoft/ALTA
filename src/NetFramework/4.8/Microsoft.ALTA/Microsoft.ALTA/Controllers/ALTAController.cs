@@ -26,11 +26,13 @@
             {
                 method = methods[assemblyName + className + methodName];
                 testInstance = instances[assemblyName + className];
+
                 type = types[assemblyName + className];
 
                 // running the test method
                 InitializeTest(type, testInstance);
                 await (Task)method.Invoke(testInstance, query);
+
 
                 return new HttpStatusCodeResult(200);
             }
@@ -40,7 +42,9 @@
                 if (!assemblies.ContainsKey(assemblyName))
                 {
                     testAssembly = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, $"{assemblyName}.dll"));
+
                     InitializeAssembly(testAssembly);
+
                     assemblies[assemblyName] = testAssembly;
                 }
                 else
@@ -68,11 +72,13 @@
                     testInstance = InitializeClass(type);
                     instances[assemblyName + className] = testInstance;
                 }
+
                 method = type.GetMethod(methodName);
                 methods[assemblyName + className + methodName] = method;
                 InitializeTest(type, testInstance);
 
                 await (Task)method.Invoke(testInstance, query);
+
 
                 return new HttpStatusCodeResult(200);
             }
@@ -83,6 +89,8 @@
             object test_Instance = Activator.CreateInstance(t);
             var initializeClass = t.GetMethods().FirstOrDefault(x => x.GetCustomAttributes<ClassInitializeAttribute>().Any());
 
+
+
             if (initializeClass != null)
             {
                 initializeClass.Invoke(test_Instance, new object[] { null });
@@ -90,6 +98,7 @@
 
             return test_Instance;
         }
+
 
         private static void InitializeAssembly(Assembly assembly)
         {
@@ -110,5 +119,6 @@
                 initializeTest.Invoke(testInstance, new object[] { null });
             }
         }
+
     }
 }

@@ -26,6 +26,7 @@
             {
                 method = methods[assemblyName + className + methodName];
                 testInstance = instances[assemblyName + className];
+
                 type = types[assemblyName + className];
 
                 // running the test method
@@ -40,7 +41,9 @@
                 if (!assemblies.ContainsKey(assemblyName))
                 {
                     testAssembly = Assembly.LoadFrom(Path.Combine(this.path, $"{assemblyName}.dll"));
+
                     InitializeAssembly(testAssembly);
+
                     assemblies[assemblyName] = testAssembly;
                 }
                 else
@@ -70,9 +73,11 @@
 
                 method = type.GetMethod(methodName);
                 methods[assemblyName + className + methodName] = method;
+
                 InitializeTest(type, testInstance);
 
                 await (Task)method.Invoke(testInstance, query);
+
 
                 return this.StatusCode(200);
             }
@@ -83,6 +88,8 @@
             object test_Instance = Activator.CreateInstance(t);
             var initializeClass = t.GetMethods().FirstOrDefault(x => x.GetCustomAttributes<ClassInitializeAttribute>().Any());
 
+
+
             if (initializeClass != null)
             {
                 initializeClass.Invoke(test_Instance, new object[] { null });
@@ -90,6 +97,7 @@
 
             return test_Instance;
         }
+
 
         private static void InitializeAssembly(Assembly assembly)
         {
@@ -110,5 +118,6 @@
                 initializeTest.Invoke(testInstance, new object[] { null });
             }
         }
+
     }
 }
