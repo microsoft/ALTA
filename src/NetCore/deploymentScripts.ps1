@@ -1,6 +1,27 @@
-Remove-Item "C:\Users\t-abelseyoum\source\repos\microsoft\ALTA\src\NetCore\Microsoft.ALTA\Microsoft.ALTA\bin\Release\net6.0\win-x64\publish\*" -Recurse
-dotnet publish --configuration Release --runtime win-x64 --self-contained "C:\Users\t-abelseyoum\source\repos\microsoft\ALTA\src\NetCore\Microsoft.ALTA\Mircosoft.ALTA.sln"
-Copy-Item "C:\Users\t-abelseyoum\source\repos\microsoft\ALTA\src\NetCore\Microsoft.ALTA.SampleTest\Microsoft.ALTA.SampleTest\bin\Debug\net6.0\*" -Destination "C:\Users\t-abelseyoum\source\repos\microsoft\ALTA\src\NetCore\Microsoft.ALTA\Microsoft.ALTA\bin\Release\net6.0\win-x64\publish"
-Compress-Archive -Path "C:\Users\t-abelseyoum\source\repos\microsoft\ALTA\src\NetCore\Microsoft.ALTA\Microsoft.ALTA\bin\Release\net6.0\win-x64\publish\*" "net6.0.zip"
-az account set --name "Cloud.Validation.and.Pipeline.Orchestration"
-az webapp deploy --resource-group "rg-test-internship" --name "ZipDeployChecker" --type "zip" --src-path "C:\Users\t-abelseyoum\source\repos\microsoft\ALTA\src\NetCore\net6.0.zip"
+$asterisk = "\*"
+$PublishPath = "C:\Users\t-abelseyoum\source\repos\microsoft\cre-avengers-interns\ALTA\src\NetCore\6.0\Microsoft.ALTA\Microsoft.ALTA\bin\Release\net6.0\win-x64\publish"
+$SolutionPath = "C:\Users\t-abelseyoum\source\repos\microsoft\cre-avengers-interns\ALTA\src\NetCore\6.0\Microsoft.ALTA\Mircosoft.ALTA.sln"
+$TestBinariesPath = "C:\Users\t-abelseyoum\source\repos\microsoft\cre-avengers-interns\ALTA\src\NetCore\STLTest\bin\Release\net6.0\win-x64\*"
+$ZipPath = "C:\Users\t-abelseyoum\source\repos\microsoft\ALTA\src\NetCore\net6.0.zip"
+$FullPublishPath = $PublishPath+$asterisk
+$Subscription = "Cloud.Validation.and.Pipeline.Orchestration"
+$ResourceGroup = "rg-test-internship"
+$WebApp = "STLZipDeployChecker"
+
+
+$fileexists = Test-Path -Path $PublishPath
+$zipexists = Test-Path -Path $ZipPath
+
+If($zipexists){
+    Remove-Item $ZipPath -Recurse
+}
+
+If($fileexists){
+   Remove-Item $FullPublishPath -Recurse
+}
+
+dotnet publish --configuration Release --runtime win-x64 --self-contained $SolutionPath
+Copy-Item $TestBinariesPath -Destination $PublishPath -Force
+Compress-Archive -Path $FullPublishPath "net6.0.zip"
+az account set --name $Subscription
+az webapp deploy --resource-group $ResourceGroup --name $WebApp --type "zip" --src-path $ZipPath
