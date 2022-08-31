@@ -1,5 +1,5 @@
 # Project ALTA
-Welcome to ALTA! We are very happy to cover all of your load testing needs. Currently, our solution is able to support MS Test files and allow them to be ran on Azure Load Testing Service. We hope to continue this project and allow more adaptability in the future, so please feel free to check in every once in a while!
+ALTA is a load testing helper tool that allows you to execute MSTests through Azure Load Testing with minimal additional latency. ALTA provides end-to-end solutions for tests written in .NET Core and .NET framework.
 
 # Project
 
