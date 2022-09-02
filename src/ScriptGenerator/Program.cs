@@ -317,6 +317,7 @@ namespace ScriptGeneratorApplication
                     // get endpoint, and total number of threads from user input
                     Console.WriteLine("Enter endpoint url:");
                     string endpoint = Console.ReadLine();
+                    string endpoint = Console.ReadLine().Replace("https://", String.Empty);
 
                     Console.WriteLine("Enter total number of threads:");
                     int numThreads = int.Parse(Console.ReadLine());
